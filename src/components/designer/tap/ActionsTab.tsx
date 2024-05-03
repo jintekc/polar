@@ -23,8 +23,8 @@ const ActionsTab: React.FC<Props> = ({ node }) => {
       {node.status === Status.Started && (
         <>
           <SendAssetButton node={node} />
-          <MintAssetButton node={node} />
           <NewAddressButton node={node} />
+          <MintAssetButton node={node} />
           <Styled.Spacer />
 
           <OpenTerminalButton node={node} />
