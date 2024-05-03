@@ -12,6 +12,7 @@ import {
   CommonNode,
   EclairNode,
   LightningNode,
+  LitdNode,
   LndNode,
   TapdNode,
 } from 'shared/types';
@@ -141,6 +142,11 @@ class DockerService implements DockerLibrary {
         const eclair = node as EclairNode;
         const backend = bitcoin.find(n => n.name === eclair.backendName) || bitcoin[0];
         file.addEclair(eclair, backend);
+      }
+      if (node.implementation === 'litd') {
+        const litd = node as LitdNode;
+        const backend = bitcoin.find(n => n.name === litd.backendName) || bitcoin[0];
+        file.addLitd(litd, backend);
       }
     });
     tap.forEach(node => {
@@ -344,6 +350,10 @@ class DockerService implements DockerLibrary {
         const { dataDir, apiDir } = dockerConfigs['c-lightning'];
         await ensureDir(join(nodeDir, dataDir as string));
         await ensureDir(join(nodeDir, apiDir as string));
+      } else if (node.implementation === 'litd') {
+        await ensureDir(join(nodeDir, 'lit'));
+        await ensureDir(join(nodeDir, 'lnd'));
+        await ensureDir(join(nodeDir, 'tap'));
       }
     }
   }

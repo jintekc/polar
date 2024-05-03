@@ -54,6 +54,7 @@ describe('App model', () => {
         bitcoind: 1,
         btcd: 0,
         tapd: 0,
+        litd: 0,
       },
     });
     mockRepoService.load.mockResolvedValue({
@@ -88,6 +89,7 @@ describe('App model', () => {
       bitcoind: 1,
       btcd: 0,
       tapd: 0,
+      litd: 0,
     });
   });
 
@@ -137,6 +139,7 @@ describe('App model', () => {
           bitcoind: 1,
           btcd: 1,
           tapd: 1,
+          litd: 0,
         },
       });
     });
@@ -158,6 +161,7 @@ describe('App model', () => {
           LND: ['0.99.0-beta'], // a new version available for LND
           'c-lightning': [],
           eclair: [],
+          litd: [],
           bitcoind: [],
           btcd: [],
           tapd: [],

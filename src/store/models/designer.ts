@@ -220,7 +220,7 @@ const designerModel: DesignerModel = {
         ? createLightningChartNode(newNode)
         : newNode.type === 'bitcoin'
         ? createBitcoinChartNode(newNode)
-        : createTapdChartNode(newNode as TapdNode);
+        : createTapdChartNode(newNode);
     node.position = position;
     chart.nodes[node.id] = node;
     if (link) chart.links[link.id] = link;
@@ -315,7 +315,7 @@ const designerModel: DesignerModel = {
         // remove the loading node added in onCanvasDrop
         actions.removeNode(LOADING_NODE_ID);
       } else if (
-        ['LND', 'c-lightning', 'eclair', 'bitcoind', 'tapd'].includes(data.type)
+        ['LND', 'c-lightning', 'eclair', 'litd', 'bitcoind', 'tapd'].includes(data.type)
       ) {
         const { addNode, toggleNode } = getStoreActions().network;
         try {

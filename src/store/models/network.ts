@@ -22,6 +22,7 @@ import {
   createBitcoindNetworkNode,
   createCLightningNetworkNode,
   createEclairNetworkNode,
+  createLitdNetworkNode,
   createLndNetworkNode,
   createNetwork,
   createTapdNetworkNode,
@@ -287,6 +288,7 @@ const networkModel: NetworkModel = {
           bitcoind: bitcoindNodes,
           btcd: 0,
           tapd: 0,
+          litd: 0,
         },
       });
 
@@ -342,6 +344,15 @@ const networkModel: NetworkModel = {
             network,
             version,
             dockerRepoState.images.eclair.compatibility,
+            docker,
+          );
+          network.nodes.lightning.push(node);
+          break;
+        case 'litd':
+          node = createLitdNetworkNode(
+            network,
+            version,
+            dockerRepoState.images.litd.compatibility,
             docker,
           );
           network.nodes.lightning.push(node);
