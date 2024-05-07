@@ -442,6 +442,7 @@
   "cmps.network.NewNetwork.clightningWindows": "Not supported on Windows yet.",
   "cmps.network.NewNetwork.btnCreate": "Create Network",
   "cmps.network.NewNetwork.createError": "Unable to create the new network",
+  "cmps.network.NewNetwork.tapdCountError": "The number of Taproot Assets nodes must be less than or equal to the number of LND nodes",
   "cmps.nodeImages.CommandVariables.header": "Command Variable Substitutions",
   "cmps.nodeImages.CommandVariables.tableTitle": "Wrap the variables below in double braces to use them in the command",
   "cmps.nodeImages.CommandVariables.variable": "Variable",

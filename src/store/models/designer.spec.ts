@@ -128,6 +128,8 @@ describe('Designer model', () => {
         clightningNodes: 0,
         eclairNodes: 0,
         bitcoindNodes: 1,
+        tapdNodes: 0,
+        litdNodes: 0,
         customNodes: {},
       });
       store.getActions().designer.setActiveId(firstNetwork().id);
@@ -470,6 +472,8 @@ describe('Designer model', () => {
           clightningNodes: 0,
           eclairNodes: 0,
           bitcoindNodes: 1,
+          tapdNodes: 0,
+          litdNodes: 0,
           customNodes: {},
         });
         const newId = store.getState().network.networks[1].id;
@@ -496,6 +500,8 @@ describe('Designer model', () => {
           clightningNodes: 0,
           eclairNodes: 0,
           bitcoindNodes: 1,
+          tapdNodes: 0,
+          litdNodes: 0,
           customNodes: {},
         });
         const newId = store.getState().network.networks[1].id;
@@ -530,6 +536,8 @@ describe('Designer model', () => {
           clightningNodes: 0,
           eclairNodes: 0,
           bitcoindNodes: 0,
+          tapdNodes: 0,
+          litdNodes: 0,
           customNodes: {},
         });
         const newId = store.getState().network.networks[1].id;
