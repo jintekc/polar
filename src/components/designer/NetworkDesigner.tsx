@@ -17,6 +17,7 @@ import {
   OpenChannelModal,
   PayInvoiceModal,
 } from './lightning/actions';
+import LncAddSessionModal from './lightning/connect/LncAddSessionModal';
 import Sidebar from './Sidebar';
 import {
   ChangeTapBackendModal,
@@ -61,6 +62,7 @@ const NetworkDesigner: React.FC<Props> = ({ network, updateStateDelay = 3000 }) 
     sendOnChain,
     advancedOptions,
     changeTapBackend,
+    addLncSession,
   } = useStoreState(s => s.modals);
 
   const { save } = useStoreActions(s => s.network);
@@ -108,6 +110,7 @@ const NetworkDesigner: React.FC<Props> = ({ network, updateStateDelay = 3000 }) 
       {newAddress.visible && <NewAddressModal network={network} />}
       {changeTapBackend.visible && <ChangeTapBackendModal network={network} />}
       {sendAsset.visible && <SendAssetModal network={network} />}
+      {addLncSession.visible && <LncAddSessionModal network={network} />}
     </Styled.Designer>
   );
 };
