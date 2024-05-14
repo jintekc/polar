@@ -1,17 +1,26 @@
 import detectPort from 'detect-port';
-import { CLightningNode, LndNode, NodeImplementation, Status } from 'shared/types';
+import {
+  CLightningNode,
+  LitdNode,
+  LndNode,
+  NodeImplementation,
+  Status,
+} from 'shared/types';
 import { Network } from 'types';
 import { defaultRepoState } from './constants';
 import {
   createCLightningNetworkNode,
+  createLitdNetworkNode,
   createLndNetworkNode,
+  createNetwork,
   createTapdNetworkNode,
   getImageCommand,
   getOpenPortRange,
   getOpenPorts,
+  mapToTapd,
   OpenPorts,
 } from './network';
-import { getNetwork, testManagedImages } from './tests';
+import { getNetwork, testManagedImages, testNodeDocker } from './tests';
 
 const mockDetectPort = detectPort as jest.Mock;
 
@@ -49,7 +58,20 @@ describe('Network Utils', () => {
     let network: Network;
 
     beforeEach(() => {
-      network = getNetwork();
+      network = createNetwork({
+        id: 1,
+        name: 'my-test',
+        lndNodes: 2,
+        clightningNodes: 1,
+        eclairNodes: 1,
+        bitcoindNodes: 1,
+        tapdNodes: 0,
+        litdNodes: 1,
+        status: Status.Stopped,
+        repoState: defaultRepoState,
+        managedImages: testManagedImages,
+        customImages: [],
+      });
     });
 
     it('should update the ports for bitcoind', async () => {
@@ -132,7 +154,7 @@ describe('Network Utils', () => {
       const ports = (await getOpenPorts(network)) as OpenPorts;
       expect(ports).toBeDefined();
       expect(ports[network.nodes.lightning[0].name].grpc).toBe(10002);
-      expect(ports[network.nodes.lightning[3].name].grpc).toBe(10004);
+      expect(ports[network.nodes.lightning[4].name].grpc).toBe(10005);
     });
 
     it("should not update zero'd grpc port for c-lightning nodes", async () => {
@@ -158,7 +180,7 @@ describe('Network Utils', () => {
       const ports = (await getOpenPorts(network)) as OpenPorts;
       expect(ports).toBeDefined();
       expect(ports[network.nodes.lightning[0].name].rest).toBe(8082);
-      expect(ports[network.nodes.lightning[3].name].rest).toBe(8084);
+      expect(ports[network.nodes.lightning[4].name].rest).toBe(8085);
     });
 
     it('should update the p2p ports for lightning nodes', async () => {
@@ -172,7 +194,29 @@ describe('Network Utils', () => {
       expect(ports[network.nodes.lightning[0].name].p2p).toBe(9736);
       expect(ports[network.nodes.lightning[1].name].p2p).toBe(9837);
       expect(ports[network.nodes.lightning[2].name].p2p).toBe(9938);
-      expect(ports[network.nodes.lightning[3].name].p2p).toBe(9738);
+      expect(ports[network.nodes.lightning[4].name].p2p).toBe(9739);
+    });
+
+    it('should update the p2p ports for litd nodes', async () => {
+      const portsInUse = [9638];
+      mockDetectPort.mockImplementation(port =>
+        Promise.resolve(portsInUse.includes(port) ? port + 1 : port),
+      );
+      network.nodes.bitcoin = [];
+      const ports = (await getOpenPorts(network)) as OpenPorts;
+      expect(ports).toBeDefined();
+      expect(ports[network.nodes.lightning[3].name].p2p).toBe(9639);
+    });
+
+    it('should update the web ports for litd nodes', async () => {
+      const portsInUse = [8446];
+      mockDetectPort.mockImplementation(port =>
+        Promise.resolve(portsInUse.includes(port) ? port + 1 : port),
+      );
+      network.nodes.bitcoin = [];
+      const ports = (await getOpenPorts(network)) as OpenPorts;
+      expect(ports).toBeDefined();
+      expect(ports[network.nodes.lightning[3].name].web).toBe(8447);
     });
 
     it('should not update ports if none are in use', async () => {
@@ -235,7 +279,7 @@ describe('Network Utils', () => {
       // alice ports should not be changed
       expect(ports[network.nodes.lightning[0].name]).toBeUndefined();
       // bob ports should change
-      const lnd2 = network.nodes.lightning[3] as LndNode;
+      const lnd2 = network.nodes.lightning[4] as LndNode;
       expect(ports[lnd2.name].grpc).toBe(lnd2.ports.grpc + 1);
       expect(ports[lnd2.name].rest).toBe(lnd2.ports.rest + 1);
     });
@@ -343,6 +387,42 @@ describe('Network Utils', () => {
           `This network does not contain a LND v${compatibleLnd} (or higher) node which is required for tapd v${latest}`,
         ),
       );
+    });
+  });
+
+  describe('mapToTapd', () => {
+    let network: Network;
+    let litd: LitdNode;
+
+    beforeEach(() => {
+      network = getNetwork();
+      litd = createLitdNetworkNode(
+        network,
+        defaultRepoState.images.litd.latest,
+        defaultRepoState.images.litd.compatibility,
+        testNodeDocker,
+      );
+    });
+
+    it('should map a litd node to a tapd node', () => {
+      const tapd = mapToTapd(litd);
+      expect(tapd).toBeDefined();
+      expect(tapd.id).toBe(litd.id);
+      expect(tapd.name).toBe(litd.name);
+      expect(tapd.type).toBe('tap');
+      expect(tapd.implementation).toBe('litd');
+      expect(tapd.ports.grpc).toBe(litd.ports.web);
+      expect(tapd.ports.rest).toBe(litd.ports.rest);
+    });
+
+    it('should throw an error if the node is not a litd node', () => {
+      const lnd = createLndNetworkNode(
+        network,
+        defaultRepoState.images.LND.latest,
+        defaultRepoState.images.LND.compatibility,
+        testNodeDocker,
+      );
+      expect(() => mapToTapd(lnd)).toThrow(`Node "${lnd.name}" is not a litd node`);
     });
   });
 });

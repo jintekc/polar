@@ -381,7 +381,7 @@ const modalsModel: ModalsModel = {
         const lndNode = getTapBackendNode(nodeName, network);
         if (lndNode) {
           await getStoreActions().lightning.getWalletBalance(lndNode);
-          actions.setMintAsset({ lndName: lndNode.name });
+          actions.setSendAsset({ visible: true, lndName: lndNode.name });
         }
       }
     },

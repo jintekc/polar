@@ -761,7 +761,7 @@ export const getOpenPorts = async (network: Network): Promise<OpenPorts | undefi
     }
   }
 
-  litd = litd.filter(n => n.status !== Status.Started);
+  litd = litd.filter(n => n.status !== Status.Started); //??
   if (litd.length) {
     let existingPorts = litd.map(n => n.ports.rest);
     let openPorts = await getOpenPortRange(existingPorts);
@@ -987,7 +987,7 @@ export const getTapBackendNode = (nodeName: string, network: Network) => {
     tapNode = node as LitdNode;
   }
   if (tapNode && ['litd', 'tapd'].includes(tapNode.implementation)) {
-    return network?.nodes.lightning.find(n => n.name === tapNode.lndName);
+    return network.nodes.lightning.find(n => n.name === tapNode.lndName);
   }
 };
 
@@ -1011,7 +1011,7 @@ export const mapToTapd = (node: CommonNode): TapdNode => {
     return node as TapdNode;
   }
   // if the node is not a litd node, throw an error
-  if (node.type !== 'lightning' && (node as LightningNode).implementation !== 'litd') {
+  if (node.type !== 'lightning' || (node as LightningNode).implementation !== 'litd') {
     throw new Error(`Node "${node.name}" is not a litd node`);
   }
 
@@ -1021,7 +1021,7 @@ export const mapToTapd = (node: CommonNode): TapdNode => {
     networkId: litd.networkId,
     name: litd.name,
     type: 'tap',
-    implementation: 'tapd',
+    implementation: 'litd',
     version: litd.version,
     status: litd.status,
     lndName: litd.lndName,
