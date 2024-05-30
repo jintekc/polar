@@ -21,8 +21,10 @@ interface ChangeBackendModel {
 interface CreateInvoiceModel {
   visible: boolean;
   nodeName?: string;
-  invoice?: string;
   amount?: number;
+  // displayed after the invoice is created
+  invoice?: string;
+  assetName?: string;
 }
 
 interface PayInvoiceModel {
@@ -234,8 +236,8 @@ const modalsModel: ModalsModel = {
       ...payload,
     };
   }),
-  showCreateInvoice: thunk((actions, { nodeName, invoice, amount }) => {
-    actions.setCreateInvoice({ visible: true, nodeName, invoice, amount });
+  showCreateInvoice: thunk((actions, { nodeName, invoice, amount, assetName }) => {
+    actions.setCreateInvoice({ visible: true, nodeName, invoice, amount, assetName });
   }),
   hideCreateInvoice: thunk(actions => {
     actions.setCreateInvoice({

@@ -153,7 +153,12 @@ export interface LightningService {
   connectPeers: (node: LightningNode, rpcUrls: string[]) => Promise<void>;
   openChannel: (options: OpenChannelOptions) => Promise<PLN.LightningNodeChannelPoint>;
   closeChannel: (node: LightningNode, channelPoint: string) => Promise<any>;
-  createInvoice: (node: LightningNode, amount: number, memo?: string) => Promise<string>;
+  createInvoice: (
+    node: LightningNode,
+    amount: number,
+    memo?: string,
+    hopHint?: { nodeId: string; chanId: string; msats: string },
+  ) => Promise<string>;
   payInvoice: (
     node: LightningNode,
     invoice: string,
@@ -196,7 +201,13 @@ export interface TapService {
     peerPubkey: string,
     assetId: string,
     amount: number,
-  ) => Promise<TAP.FundChannelResponse>;
+  ) => Promise<string>;
+  addAssetBuyOrder: (
+    node: TapNode,
+    peerPubkey: string,
+    assetId: string,
+    amount: number,
+  ) => Promise<PTAP.BuyOrder>;
 }
 
 export interface TapFactoryInjection {
