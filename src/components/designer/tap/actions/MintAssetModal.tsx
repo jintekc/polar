@@ -93,6 +93,7 @@ const MintAssetModal: React.FC<Props> = ({ network }) => {
           autoFund: true,
         }}
         onFinish={handleSubmit}
+        disabled={mintAssetAsync.loading}
       >
         <Form.Item name="assetType" label={l('assetType')}>
           <Select<number>

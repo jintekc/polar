@@ -86,6 +86,7 @@ export const injections: StoreInjections = {
     listSessions: jest.fn(),
     addSession: jest.fn(),
     revokeSession: jest.fn(),
+    waitUntilOnline: jest.fn(),
   },
 };
 export const litdServiceMock = injections.litdService as jest.Mocked<
