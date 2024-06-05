@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/jamaljsr/polar/compare/v2.2.0...v3.0.0)
+
+WIP
+
+### Features
+
+- Shutdown Docker Containers when Closing Polar GUI by @Abdulkbk in https://github.com/jamaljsr/polar/pull/844
+- Channel UI feature: Real-time updates of channels status by @kelvinator07 in https://github.com/jamaljsr/polar/pull/837
+- Remember node counts when creating new networks by @jamaljsr in https://github.com/jamaljsr/polar/pull/895
+
+### Bug Fixes
+
+- OpenChannelModal: added default value for isPrivate checkbox by @kelvinator07 in https://github.com/jamaljsr/polar/pull/852
+- Fix some comments by @soonsouth in https://github.com/jamaljsr/polar/pull/858
+
+### Node Implementations
+
+- Add support for Terminal (litd) v0.12.5-alpha by @jamaljsr in https://github.com/jamaljsr/polar/pull/902
+- Add support for LND v0.17.5 and Bitcoin Core v27.0 by @jamaljsr in https://github.com/jamaljsr/polar/pull/880
+- add support for LND v0.18.0-beta.rc1 by @jamaljsr in https://github.com/jamaljsr/polar/pull/887
+- add support for Core Lightning v23.08.2 & v24.02.2 by @jamaljsr in https://github.com/jamaljsr/polar/pull/879
+
+### Translations
+
+- Fix japanese by @Hakkadaikon in https://github.com/jamaljsr/polar/pull/849
+
 ## [2.2.0](https://github.com/jamaljsr/polar/compare/v2.1.0...v2.2.0)
 
 This minor release adds support for the latest LND, Eclair, and tapd nodes. It includes
