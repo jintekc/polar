@@ -87,6 +87,7 @@ const appModel: AppModel = {
       btcd: 0,
       tapd: 0,
       litd: 0,
+      electrs: 0,
     },
     basePorts: {
       LND: { grpc: BasePorts.LND.grpc, rest: BasePorts.LND.rest },
@@ -109,6 +110,8 @@ const appModel: AppModel = {
     const nodes: ManagedImage[] = [];
     const { managed } = state.settings.nodeImages;
     Object.entries(state.dockerRepoState.images).forEach(([type, entry]) => {
+      console.log('type', type);
+      console.log('entry', entry);
       entry.versions.forEach(version => {
         // search for a custom command saved in settings
         const m = managed.find(n => n.implementation === type && n.version === version);

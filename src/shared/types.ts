@@ -10,7 +10,7 @@ export interface CommonNode {
   id: number;
   networkId: number;
   name: string;
-  type: 'bitcoin' | 'lightning' | 'tap';
+  type: 'bitcoin' | 'lightning' | 'tap' | 'explorer';
   version: string;
   status: Status;
   errorMsg?: string;
@@ -72,6 +72,17 @@ export interface BitcoinNode extends CommonNode {
   ports: Record<string, number>;
 }
 
+export interface ElecrtsNode extends CommonNode {
+  type: 'explorer';
+  implementation: 'electrs';
+  peers: string[];
+  ports: {
+    rpc: number;
+    p2p: number;
+    zmqBlock: number;
+    zmqTx: number;
+  };
+}
 export interface BitcoindNode extends BitcoinNode {
   implementation: 'bitcoind';
   ports: {
@@ -130,7 +141,8 @@ export interface LitdNode extends LightningNode {
 export type NodeImplementation =
   | BitcoinNode['implementation']
   | LightningNode['implementation']
-  | TapNode['implementation'];
+  | TapNode['implementation']
+  | ElecrtsNode['implementation'];
 
 export type AnyNode = BitcoinNode | LightningNode | TapNode;
 

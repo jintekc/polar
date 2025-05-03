@@ -305,6 +305,7 @@ const networkModel: NetworkModel = {
           tapd: payload.tapdNodes,
           litd: payload.litdNodes,
           btcd: 0,
+          electrs: 0,
         },
       });
 

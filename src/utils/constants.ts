@@ -6,6 +6,7 @@ import eclairLogo from 'resources/eclair.png';
 import litdLogo from 'resources/litd.svg';
 import lndLogo from 'resources/lnd.png';
 import tapLogo from 'resources/tap.svg';
+import electrsLogo from 'resources/electrs.png';
 import packageJson from '../../package.json';
 
 // App
@@ -79,6 +80,9 @@ export const BasePorts: Record<NodeImplementation, Record<string, number>> = {
     grpc: 13001,
     p2p: 9635,
     web: 8443,
+  },
+  electrs: {
+    rest: 3000,
   },
 };
 
@@ -223,6 +227,25 @@ export const dockerConfigs: Record<NodeImplementation, DockerConfig> = {
     ].join('\n  '),
     // if vars are modified, also update composeFile.ts & the i18n strings for cmps.nodes.CommandVariables
     variables: ['rpcUser', 'rpcAuth'],
+  },
+  electrs: {
+    name: 'Electrum Rust Server',
+    imageName: 'jintek/polar-electrs',
+    logo: electrsLogo,
+    platforms: ['mac', 'linux', 'windows'],
+    volumeDirName: 'electrs',
+    command: [
+      'electrs',
+      '-vvvv',
+      '--network regtest',
+      '--daemon-rpc-addr {{backendName}}:18443',
+      '--http-addr 0.0.0.0:3000',
+      '--cookie {{rpcUser}}:{{rpcAuth}}',
+      '--daemon-dir /data/.bitcoin',
+      '--address-search',
+      '--timestamp',
+    ].join('\n'),
+    variables: ['rpcUser', 'rpcPass', 'backendName'],
   },
   btcd: {
     name: 'btcd',
@@ -371,6 +394,10 @@ export const defaultRepoState: DockerRepoState = {
     bitcoind: {
       latest: '28.0',
       versions: ['28.0', '27.0', '26.0'],
+    },
+    electrs: {
+      latest: '0.1.0',
+      version: ['0.1.0'],
     },
     btcd: {
       latest: '',
